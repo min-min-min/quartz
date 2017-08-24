@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenjing.quartz.server.mapper.RetryOrderMapper">
+    <resultMap id="BaseResultMap" type="com.chenjing.quartz.server.entity.RetryOrder">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="order_id" jdbcType="VARCHAR" property="orderId"/>
+        <result column="exp_time" jdbcType="TIMESTAMP" property="expTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.chenjing.quartz.server.entity.RetryOrder">
+        <result column="info" jdbcType="LONGVARCHAR" property="info"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, order_id, exp_time, create_time
+  </sql>
+    <sql id="Blob_Column_List">
+    info
+  </sql>
+
+    <select id="countByOrderId" parameterType="java.lang.String" resultType="java.lang.Integer">
+      select count(*) from retry_order where order_id=#{orderId}
+  </select>
+
+    <select id="listByAll" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from retry_order
+    </select>
+
+    <delete id="deleteByOrderId">
+    delete from retry_order
+    where order_id = #{orderId}
+  </delete>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from retry_order
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from retry_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.chenjing.quartz.server.entity.RetryOrder">
+    insert into retry_order (id, order_id, exp_time, 
+      create_time, info)
+    values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{expTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{info,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.chenjing.quartz.server.entity.RetryOrder">
+        insert into retry_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="expTime != null">
+                exp_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="info != null">
+                info,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=VARCHAR},
+            </if>
+            <if test="expTime != null">
+                #{expTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="info != null">
+                #{info,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chenjing.quartz.server.entity.RetryOrder">
+        update retry_order
+        <set>
+            <if test="orderId != null">
+                order_id = #{orderId,jdbcType=VARCHAR},
+            </if>
+            <if test="expTime != null">
+                exp_time = #{expTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="info != null">
+                info = #{info,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chenjing.quartz.server.entity.RetryOrder">
+    update retry_order
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      exp_time = #{expTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      info = #{info,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.chenjing.quartz.server.entity.RetryOrder">
+    update retry_order
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      exp_time = #{expTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
